@@ -1,8 +1,8 @@
 package asociacion.pantalla;
 
 import asociacion.entidades.Curso;
-import static asociacion.entidades.ListaEntidades.getCursos;
 import asociacion.entidades.Profesor;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -10,30 +10,24 @@ import asociacion.entidades.Profesor;
  */
 public class EditarPantallaProfesor extends javax.swing.JFrame {
 
-    String nombreCurso; 
     private Profesor profesor;
+    private Curso curso;
     
     public EditarPantallaProfesor() {
         initComponents();
     }
     
-    public EditarPantallaProfesor(String nombreCurso) {
+    public EditarPantallaProfesor(Curso curso) {
         initComponents();
-        inicializarFormulario(nombreCurso);
-        this.nombreCurso = nombreCurso;
+        this.curso = curso;
+        inicializarFormulario();
+        setLocationRelativeTo(this);
     }
     
-    private void inicializarFormulario(String nombreCurso) {
-        lblTitulo.setText("[" + nombreCurso + "]");
+    private void inicializarFormulario() {
+        lblTitulo.setText("Curso: [" + this.curso.getNombre() + "]");
     }
-    
-    private void agregarProfesor() {
-        if (txtNombre.getText() != ""){
-            String nombre = txtNombre.getText();
-            profesor = new Profesor(nombre);
-        }
-    }
-
+       
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -45,6 +39,7 @@ public class EditarPantallaProfesor extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Añadir Profesor");
 
         lblTitulo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblTitulo.setText("[Nombre del Curso]");
@@ -70,72 +65,78 @@ public class EditarPantallaProfesor extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAgregar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancelar))
-                    .addComponent(lblTitulo)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblNombre)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblTitulo)
+                        .addGap(111, 111, 111))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAgregar)
+                                .addGap(4, 4, 4)
+                                .addComponent(btnCancelar))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(34, 34, 34))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombre)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCancelar)
-                    .addComponent(btnAgregar))
-                .addGap(30, 30, 30))
+                    .addComponent(btnAgregar)
+                    .addComponent(btnCancelar))
+                .addGap(42, 42, 42))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-        
-        agregarProfesor();
-        if (this.profesor != null){
-            Profesor[] profesores = new Profesor[2];
-            
-            for (Curso curso : getCursos()) {
-                if (curso.getNombre() == this.nombreCurso){
-                    profesores = curso.getProfesores();
-                    break;
-                }
-            }
-            for (int i = 0; i < 2; i++){
+    private void llenarDatoProfesor() {
+        String nombre = txtNombre.getText();
+        if (!nombre.isEmpty()){
+            this.profesor = new Profesor(nombre);
+        }
+    }
+    
+    private void agregarProfesorAlCurso() {
+        Profesor[] profesores = this.curso.getProfesores();
+        for (int i = 0; i < profesores.length; i++) {
+            if (profesores[i] == null){
                 profesores[i] = this.profesor;
-            }
-            
-            for (Curso curso : getCursos()) {
-                if (curso.getNombre() == this.nombreCurso) {
-                    curso.setProfesores(profesores);
-                }
+                break;
             }
         }
-        
-        PantallaProfesor pantallaProfesor = new PantallaProfesor(nombreCurso);
+        this.curso.setProfesores(profesores);
+    }
+    
+    private void mostrarPantallaProfesor() {
+        this.setVisible(false);
+        PantallaProfesor pantallaProfesor = new PantallaProfesor(this.curso);
         pantallaProfesor.setVisible(true);
+    }
+    
+    
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        llenarDatoProfesor();
+        
+        if (this.profesor != null){
+            agregarProfesorAlCurso();
+            mostrarPantallaProfesor();
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-        PantallaProfesor pantallaProfesor = new PantallaProfesor(nombreCurso);
-        pantallaProfesor.setVisible(true);
+        mostrarPantallaProfesor();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     public static void main(String args[]) {

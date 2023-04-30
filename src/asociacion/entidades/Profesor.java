@@ -13,7 +13,7 @@ public class Profesor {
     public Profesor(String nombre) {
         this.nombre = nombre;
     }
-
+    
     public String getNombre() {
         return nombre;
     }

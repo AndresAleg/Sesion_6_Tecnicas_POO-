@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class ListaEntidades {
     private static List<Curso> cursos = new ArrayList<Curso>();
-    
+
     public static List<Curso> getCursos() {
         return cursos;
     }

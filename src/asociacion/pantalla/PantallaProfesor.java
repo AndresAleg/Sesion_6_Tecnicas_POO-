@@ -11,36 +11,37 @@ import javax.swing.DefaultListModel;
  */
 public class PantallaProfesor extends javax.swing.JFrame {
 
-    String nombreCurso;
-    Curso curso;
+    private Curso curso;
     
     public PantallaProfesor() {
         initComponents();
     }
     
-    public PantallaProfesor(String nombreCurso) {
+    public PantallaProfesor(Curso curso) {
         initComponents();
-        inicializarFormulario(nombreCurso);
+        this.curso = curso;
+        inicializarFormulario();
         inicializarListProfesores();
-        this.nombreCurso = nombreCurso;
+        setLocationRelativeTo(this);
     }
     
-    private void inicializarFormulario(String nombreCurso) {
+    private void inicializarFormulario() {
+        
         for (Curso curso : getCursos()) {
-            if (curso.getNombre().equals(nombreCurso)){
+            if (curso.getNombre().equals(this.curso.getNombre())){
                 this.curso = curso;
             }
         }
-        lblTitulo.setText("Profesor de [" + nombreCurso + "]");
+        lblTitulo.setText("Profesor de [" + curso.getNombre() + "]");
     }
     
     private void inicializarListProfesores(){
         DefaultListModel<String> modelo = new DefaultListModel<>();
-
+        
         Profesor[] profesores = this.curso.getProfesores();
-        if (profesores.length > 0 && profesores[0].getNombre() != null){
+        if (profesores != null && profesores.length > 0) {
             for (Profesor profesor : profesores) {
-                if (profesor != null){
+                if (profesor != null) {
                     modelo.addElement(profesor.getNombre());
                 }
             }
@@ -58,8 +59,12 @@ public class PantallaProfesor extends javax.swing.JFrame {
         btnAgregar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
+        lblBuscar = new javax.swing.JLabel();
+        txtBuscar = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Profesores");
 
         lblTitulo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblTitulo.setText("Profesor de [Nombre de Curso]");
@@ -93,6 +98,18 @@ public class PantallaProfesor extends javax.swing.JFrame {
             }
         });
 
+        lblBuscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblBuscar.setText("Buscar:");
+
+        txtBuscar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        btnBuscar.setText("buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -102,14 +119,22 @@ public class PantallaProfesor extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnRegresar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
                         .addComponent(btnAgregar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnEliminar))
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblTitulo)
-                        .addGap(0, 154, Short.MAX_VALUE)))
+                        .addGap(8, 8, 8)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblBuscar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnBuscar))
+                            .addComponent(lblTitulo))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(30, 30, 30))
         );
         layout.setVerticalGroup(
@@ -117,7 +142,12 @@ public class PantallaProfesor extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBuscar)
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar))
+                .addGap(22, 22, 22)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -131,39 +161,46 @@ public class PantallaProfesor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // TODO add your handling code here:
         this.setVisible(false);
         PantallaGestorCursos pantallaGestorCursos = new PantallaGestorCursos();
         pantallaGestorCursos.setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
         this.setVisible(false);
-        EditarPantallaProfesor editarPantallaProfesor = new EditarPantallaProfesor(nombreCurso);
+        EditarPantallaProfesor editarPantallaProfesor = new EditarPantallaProfesor(this.curso);
         editarPantallaProfesor.setVisible(true);
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // TODO add your handling code here:
-        String nombreEstudiante = (String)listProfesores.getSelectedValue();
-        Profesor[] profesores = new Profesor[30];
-        int numEstudiantes = 0;
-        
-        for (Profesor estudiante : this.curso.getProfesores()){
-            if (!estudiante.getNombre().equals(nombreEstudiante) 
-                    && numEstudiantes < 30){
-                profesores[numEstudiantes] = estudiante;
-                numEstudiantes++;
+        String nombreProfesor = (String)listProfesores.getSelectedValue();
+        Profesor[] profesores = this.curso.getProfesores();
+        for (int i = 0; i < profesores.length; i++){
+            if (profesores[i] != null && profesores[i].getNombre().equals(nombreProfesor)){
+                profesores[i] = null;
+                break;
             }
         }
-        this.curso.setProfesores(profesores);
         inicializarListProfesores();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        DefaultListModel<String> modelo = new DefaultListModel<>();
+        String textoBusqueda = txtBuscar.getText().toLowerCase();
+        if (textoBusqueda.isEmpty()) {
+            for (Profesor profesor : this.curso.getProfesores()) {
+                modelo.addElement(profesor.getNombre());
+            }
+        } else {
+            for (Profesor profesor : this.curso.getProfesores()) {
+                if (profesor.getNombre().toLowerCase().contains(textoBusqueda)) {
+                    modelo.addElement(profesor.getNombre());
+                }
+            }
+        }
+        listProfesores.setModel(modelo);
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
     public static void main(String args[]) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -175,10 +212,13 @@ public class PantallaProfesor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblBuscar;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JList<String> listProfesores;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

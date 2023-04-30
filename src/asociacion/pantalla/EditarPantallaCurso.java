@@ -10,18 +10,23 @@ import static asociacion.entidades.ListaEntidades.getCursos;
 public class EditarPantallaCurso extends javax.swing.JFrame {
 
     private Curso curso;
-    
+
     public EditarPantallaCurso() {
         initComponents();
+        setLocationRelativeTo(this);
     }
-    
+
     private void agregarCurso() {
-        
-        if (txtCodigo.getText() != "" && txtNombre.getText() != "" && txtCreditos.getText() != ""){
-            String codigo = txtCodigo.getText();
-            String nombre = txtNombre.getText();
-            int creditos = Integer.parseInt(txtCreditos.getText());
-            curso = new Curso(codigo, nombre, creditos);
+
+        if (txtCodigo.getText().isEmpty()
+                || txtNombre.getText().isEmpty()
+                || txtCreditos.getText().isEmpty()) {
+        }
+        else{
+            this.curso = new Curso(
+            txtCodigo.getText(),
+            txtNombre.getText(),
+            Integer.parseInt(txtCreditos.getText()));
         }
     }
 
@@ -39,6 +44,8 @@ public class EditarPantallaCurso extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Añadir Curso");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         lblCodigo.setText("codigo");
 
@@ -64,29 +71,31 @@ public class EditarPantallaCurso extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(88, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(64, 64, 64)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAgregar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnCancelar))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblNombre)
                             .addComponent(lblCreditos)
                             .addComponent(lblCodigo))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(93, 93, 93))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCodigo)
+                            .addComponent(txtNombre)
+                            .addComponent(txtCreditos, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAgregar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnCancelar)
+                        .addGap(10, 10, 10)))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(56, 56, 56)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(63, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCodigo)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -102,30 +111,31 @@ public class EditarPantallaCurso extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar)
                     .addComponent(btnCancelar))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addGap(39, 39, 39))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
         agregarCurso();
-        if (curso != null){
-            getCursos().add(curso);
-            PantallaGestorCursos pantallaGestorCursos = new PantallaGestorCursos();
-            pantallaGestorCursos.setVisible(true);
+
+        if (this.curso != null) {
+            getCursos().add(this.curso);
+            mostrarPantallaGestorCursos();
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+       mostrarPantallaGestorCursos();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void mostrarPantallaGestorCursos() {
         this.setVisible(false);
         PantallaGestorCursos pantallaGestorCursos = new PantallaGestorCursos();
         pantallaGestorCursos.setVisible(true);
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
+        
+    }
     public static void main(String args[]) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -1,27 +1,32 @@
 package asociacion.pantalla;
 
+import asociacion.entidades.Curso;
+import asociacion.entidades.Estudiante;
+
 /**
  *
  * @author Andres
  */
 public class EditarPantallaEstudiante extends javax.swing.JFrame {
 
-    String nombreCurso; 
+    private Estudiante estudiante;
+    private Curso curso;
     
     public EditarPantallaEstudiante() {
         initComponents();
     }
     
-    public EditarPantallaEstudiante(String nombreCurso) {
+    public EditarPantallaEstudiante(Curso curso) {
         initComponents();
-        inicializarFormulario(nombreCurso);
-        this.nombreCurso = nombreCurso;
+        this.curso = curso;
+        inicializarFormulario();
+        setLocationRelativeTo(this);
     }
     
-    private void inicializarFormulario(String nombreCurso) {
-        lblTitulo.setText("[" + nombreCurso + "]");
+    private void inicializarFormulario() {
+        lblTitulo.setText("Curso: [" + this.curso.getNombre() + "]");
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -33,6 +38,7 @@ public class EditarPantallaEstudiante extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Añadir Estudiante");
 
         lblTitulo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lblTitulo.setText("[Nombre del Curso]");
@@ -60,31 +66,31 @@ public class EditarPantallaEstudiante extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(btnAgregar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancelar))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(44, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lblTitulo)
-                .addGap(62, 62, 62))
+                        .addGap(101, 101, 101)
+                        .addComponent(lblTitulo))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(btnAgregar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(btnCancelar))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(36, 36, 36)
+                            .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addGap(21, 21, 21)
                 .addComponent(lblTitulo)
-                .addGap(38, 38, 38)
+                .addGap(62, 62, 62)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombre)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnAgregar))
@@ -94,18 +100,41 @@ public class EditarPantallaEstudiante extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        // TODO add your handling code here:
+    private void llenarDatoEstudiante() {
+        String nombre = txtNombre.getText();
+        if (!nombre.isEmpty()){
+            this.estudiante = new Estudiante(nombre);
+        }
+    }
+    
+    private void agregarEstudianteAlCurso() {
+        Estudiante[] estudiantes = this.curso.getEstudiantes();
+        for (int i = 0; i < estudiantes.length; i++) {
+            if (estudiantes[i] == null) {
+                estudiantes[i] = this.estudiante;
+                break;
+            }
+        }
+        this.curso.setEstudiantes(estudiantes);
+    }
+
+    private void mostrarPantallaEstudiante() {
         this.setVisible(false);
-        PantallaEstudiante pantallaEstudiante = new PantallaEstudiante(nombreCurso);
+        PantallaEstudiante pantallaEstudiante = new PantallaEstudiante(this.curso);
         pantallaEstudiante.setVisible(true);
+    }
+    
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        llenarDatoEstudiante();
+
+        if (this.estudiante != null){
+            agregarEstudianteAlCurso();
+            mostrarPantallaEstudiante();
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-        PantallaEstudiante pantallaEstudiante = new PantallaEstudiante(nombreCurso);
-        pantallaEstudiante.setVisible(true);
+        mostrarPantallaEstudiante();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     public static void main(String args[]) {
